@@ -48,3 +48,90 @@
 - test set 只用于最终评估，不能用于调参。
 - 记录 random seed、超参数、最佳 epoch 和运行环境。
 - 不要同时使用 `WeightedRandomSampler` 和 class-weighted loss，除非有明确实验依据。
+
+## Data preprocessing 部分
+
+压缩包包含以下内容：
+
+src/
+└── data/
+    ├── analyse_dataset.py
+    ├── build_splits.py
+    ├── dataset.py
+    ├── transforms.py
+    ├── dataloader.py
+    └── test_loader.py
+
+data/
+└── splits/
+    └── eurosat_split_seed42.csv
+
+请自行下载 EuroSAT_RGB 数据集。
+
+下载完成后，请解压到项目目录：
+
+data/raw/EuroSAT_RGB
+
+目录结构应如下：
+
+data/
+└── raw/
+    └── EuroSAT_RGB/
+
+本项目已经固定训练集、验证集和测试集划分。
+
+划分文件：
+
+data/splits/eurosat_split_seed42.csv
+
+随机种子：
+
+Seed = 42
+
+所有模型请统一使用：
+
+from src.data.dataloader import create_dataloaders
+
+data = create_dataloaders(
+    batch_size=32,
+    image_size=224,
+    model_type="pretrained",
+    seed=42,
+)
+
+train_loader = data.train_loader
+val_loader = data.val_loader
+test_loader = data.test_loader
+
+模型训练时直接使用上述 DataLoader 即可。
+
+无需自行创建 Dataset 或重新编写 DataLoader。
+
+类别编号如下：
+
+0  AnnualCrop
+1  Forest
+2  HerbaceousVegetation
+3  Highway
+4  Industrial
+5  Pasture
+6  PermanentCrop
+7  Residential
+8  River
+9  SeaLake
+
+请勿修改类别顺序。
+
+可使用以下命令验证数据模块是否正常工作：
+
+python -m src.data.dataloader
+
+正常情况下应输出：
+
+Train：18900
+Validation：4050
+Test：4050
+
+并显示：
+
+DataLoader verification passed.
