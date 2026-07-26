@@ -1,14 +1,4 @@
-"""Train and evaluate the COMP9444 Project 54 ResNet50 baseline.
-
-Run this module from the repository root::
-
-    python -m src.train.resnet50 --smoke-test
-    python -m src.train.resnet50 --epochs 20 --batch-size 32
-
-The default experiment fine-tunes ImageNet-pretrained ResNet50 weights with
-an unweighted cross-entropy loss. The best checkpoint is selected only by
-validation macro-F1. The test split is evaluated once, after training.
-"""
+"""ResNet50 baseline training for EuroSAT."""
 
 from __future__ import annotations
 
@@ -196,11 +186,8 @@ def parse_args() -> argparse.Namespace:
 
 
 def configure_reproducibility(seed: int, deterministic: bool) -> None:
-    """Seed all relevant generators and configure deterministic execution."""
-
     if deterministic:
-        # Required by deterministic CUDA matrix multiplications on CUDA >= 10.2.
-        # It must be configured before the first CUDA operation.
+        # deterministic CUDA 需要这个设置，而且要放在第一次 CUDA operation 前面
         os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
 
     set_seed(seed)
@@ -239,8 +226,7 @@ def resolve_device(requested: str) -> torch.device:
 
 
 def make_grad_scaler(enabled: bool) -> Any:
-    """Create a GradScaler across supported PyTorch API versions."""
-
+    # 新旧 PyTorch 的 GradScaler 写法有一点区别
     try:
         return torch.amp.GradScaler("cuda", enabled=enabled)
     except (AttributeError, TypeError):
@@ -266,8 +252,6 @@ def confusion_from_predictions(
 
 
 def metrics_from_confusion(confusion: torch.Tensor) -> dict[str, Any]:
-    """Calculate accuracy, macro-F1 and per-class metrics from a matrix."""
-
     confusion_float = confusion.to(torch.float64)
     support = confusion_float.sum(dim=1)
     predicted = confusion_float.sum(dim=0)
@@ -322,8 +306,6 @@ def run_epoch(
     max_batches: int | None = None,
     log_interval: int = 50,
 ) -> dict[str, Any]:
-    """Run one train or evaluation epoch without retaining all predictions."""
-
     training = optimizer is not None
     model.train(training)
 
@@ -358,8 +340,7 @@ def run_epoch(
                     scaler.scale(loss).backward()
                     scaler.step(optimizer)
                     scaler.update()
-                    # GradScaler skips optimizer.step() when it detects inf/NaN
-                    # gradients. A reduced scale signals that skipped step.
+                    # gradient overflow 时这一步可能会被 AMP skip
                     if scaler.get_scale() >= scale_before_step:
                         optimizer_steps += 1
 
@@ -400,8 +381,6 @@ def calculate_class_weights(
     train_dataset: Any,
     num_classes: int,
 ) -> tuple[torch.Tensor, list[int]]:
-    """Return balanced inverse-frequency weights from the training split."""
-
     if not hasattr(train_dataset, "samples"):
         raise TypeError("The training dataset does not expose split metadata.")
 
@@ -727,6 +706,7 @@ def main() -> None:
             f"macro-F1={val_metrics['macro_f1']:.4f}"
         )
 
+        # 只看 validation macro-F1 选 best model，不碰 test set
         if val_metrics["macro_f1"] > best_val_macro_f1:
             best_val_macro_f1 = val_metrics["macro_f1"]
             best_epoch = epoch
@@ -769,6 +749,7 @@ def main() -> None:
         "test_evaluated": False,
     }
 
+    # 正式实验最后才跑一次 test
     if not args.skip_test:
         print("\nLoading the best validation checkpoint for one final test evaluation...")
         state_dict = torch.load(best_model_path, map_location=device)

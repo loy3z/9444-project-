@@ -1,4 +1,4 @@
-"""ResNet50 model definition for EuroSAT land-cover classification."""
+"""EuroSAT ResNet50 model."""
 
 from __future__ import annotations
 
@@ -12,20 +12,14 @@ def create_resnet50(
     pretrained: bool = True,
     freeze_backbone: bool = False,
 ) -> nn.Module:
-    """Create a ResNet50 classifier with a task-specific output layer.
-
-    Args:
-        num_classes: Number of EuroSAT classes.
-        pretrained: Load the default ImageNet-1K weights when ``True``.
-        freeze_backbone: Freeze all layers except the final classifier.
-            The project baseline leaves the full network trainable.
-    """
+    """Build ResNet50 and change the last layer for EuroSAT."""
 
     if num_classes <= 1:
         raise ValueError(
             f"num_classes must be greater than 1, got {num_classes}."
         )
 
+    # baseline 用 ImageNet pretrained weights
     weights = ResNet50_Weights.DEFAULT if pretrained else None
     model = resnet50(weights=weights)
 
@@ -33,6 +27,7 @@ def create_resnet50(
         for parameter in model.parameters():
             parameter.requires_grad = False
 
+    # EuroSAT 有 10 类，所以换掉原来的 ImageNet classifier
     input_features = model.fc.in_features
     model.fc = nn.Linear(input_features, num_classes)
 
