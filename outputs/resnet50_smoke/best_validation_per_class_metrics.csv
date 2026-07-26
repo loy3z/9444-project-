@@ -1,0 +1,11 @@
+class_id,class_name,precision,recall,f1,support
+0,AnnualCrop,0.0,0.0,0.0,6
+1,Forest,0.0,0.0,0.0,8
+2,HerbaceousVegetation,0.0,0.0,0.0,4
+3,Highway,0.0,0.0,0.0,7
+4,Industrial,0.03333333333333333,0.6666666666666666,0.06349206349206349,3
+5,Pasture,0.0,0.0,0.0,7
+6,PermanentCrop,0.0,0.0,0.0,5
+7,Residential,0.0,0.0,0.0,10
+8,River,0.0,0.0,0.0,6
+9,SeaLake,0.0,0.0,0.0,8

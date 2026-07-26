@@ -1,0 +1,8 @@
+{
+  "status": "smoke_test_complete",
+  "best_epoch": 1,
+  "best_validation_macro_f1": 0.006349206349206349,
+  "training_seconds": 1.5159923000028357,
+  "checkpoint_size_bytes": 94432638,
+  "test_evaluated": false
+}

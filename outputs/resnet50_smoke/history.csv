@@ -1,0 +1,2 @@
+epoch,learning_rate,train_loss,train_accuracy,train_macro_f1,val_loss,val_accuracy,val_macro_f1,train_seconds,val_seconds
+1,0.0001,2.4881744384765625,0.0625,0.02777777777777778,2.3133544921875,0.03125,0.006349206349206349,1.2734349999991537,0.15495649999866146
