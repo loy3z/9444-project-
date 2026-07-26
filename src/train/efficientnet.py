@@ -1,10 +1,6 @@
 """EfficientNet-B0 training for EuroSAT."""
 from __future__ import annotations
 
-import os
-
-os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
-
 import argparse
 import csv
 import json
