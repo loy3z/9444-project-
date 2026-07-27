@@ -1,0 +1,10 @@
+{
+  "status": "training_complete",
+  "best_epoch": 16,
+  "best_validation_macro_f1": 0.9860241201547826,
+  "training_seconds": 740.1782359219942,
+  "checkpoint_size_bytes": 16380921,
+  "test_evaluated": true,
+  "test_accuracy": 0.9864197530864197,
+  "test_macro_f1": 0.9860686994411676
+}

@@ -54,7 +54,7 @@ outputs/
 runs/
 checkpoints/
 
-# Keep lightweight, reproducible artifacts from the local RTX 4090 run.
+# Keep lightweight, reproducible artifacts from local GPU runs.
 !outputs/
 outputs/*
 !outputs/local_gpu_resnet50_20260727/
@@ -70,6 +70,19 @@ outputs/local_gpu_resnet50_20260727/*
 !outputs/local_gpu_resnet50_20260727/test_metrics.json
 !outputs/local_gpu_resnet50_20260727/test_per_class_metrics.csv
 !outputs/local_gpu_resnet50_20260727/training_curves.png
+!outputs/local_gpu_efficientnet_b0_20260727/
+outputs/local_gpu_efficientnet_b0_20260727/*
+!outputs/local_gpu_efficientnet_b0_20260727/best_validation_metrics.json
+!outputs/local_gpu_efficientnet_b0_20260727/best_validation_per_class_metrics.csv
+!outputs/local_gpu_efficientnet_b0_20260727/config.json
+!outputs/local_gpu_efficientnet_b0_20260727/confusion_matrix.csv
+!outputs/local_gpu_efficientnet_b0_20260727/confusion_matrix.png
+!outputs/local_gpu_efficientnet_b0_20260727/confusion_matrix_normalized.png
+!outputs/local_gpu_efficientnet_b0_20260727/history.csv
+!outputs/local_gpu_efficientnet_b0_20260727/summary.json
+!outputs/local_gpu_efficientnet_b0_20260727/test_metrics.json
+!outputs/local_gpu_efficientnet_b0_20260727/test_per_class_metrics.csv
+!outputs/local_gpu_efficientnet_b0_20260727/training_curves.png
 
 # =========================
 # Dataset
