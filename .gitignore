@@ -84,6 +84,12 @@ outputs/local_gpu_efficientnet_b0_20260727/*
 !outputs/local_gpu_efficientnet_b0_20260727/test_per_class_metrics.csv
 !outputs/local_gpu_efficientnet_b0_20260727/training_curves.png
 
+# Sample-efficiency sweep results: needed so the notebook's Section 12 cell
+# loads these 36 runs instead of retraining for ~3 GPU-hours.
+!outputs/sample_efficiency/
+outputs/sample_efficiency/*
+!outputs/sample_efficiency/results.csv
+
 # =========================
 # Dataset
 # =========================
